@@ -1,6 +1,6 @@
 use std::env;
 use std::ffi::OsString;
-use std::fs::{create_dir_all, rename};
+use std::fs::{create_dir_all, remove_dir, rename};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -21,6 +21,13 @@ fn main() {
         .args([odir, LIBXDC_STATIC_LIB.into()])
         .output()
         .unwrap();
+    // libxdc creates an empty "build" dir anyway
+    let empty_build = Path::new(LIBXDC_SOURCE).join("build");
+    if empty_build.exists() {
+        let _ = remove_dir(empty_build).inspect_err(|_| {
+            println!("cargo:warning=Failed to delete build directory in libxdc source tree")
+        });
+    }
     // In libxdc makefile ODIR variable is used only for intermediate artifacts, the lib needs to
     // be moved
     rename(
