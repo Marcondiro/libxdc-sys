@@ -1,7 +1,7 @@
 use std::env;
 use std::ffi::OsString;
 use std::fs::{create_dir_all, remove_dir, rename};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 const LIBXDC_SOURCE: &str = "libxdc";
@@ -12,7 +12,7 @@ fn main() {
 
     check_submodule(LIBXDC_SOURCE);
 
-    let libxdc_artifacts_dir = PathBuf::from(&out_dir).join("libxdc_artifacts");
+    let libxdc_artifacts_dir = Path::new(&out_dir).join("libxdc_artifacts");
     create_dir_all(&libxdc_artifacts_dir).expect("Failed to create libxdc artifacts dir");
     let mut odir = OsString::from("ODIR=");
     odir.push(libxdc_artifacts_dir.as_os_str());
@@ -31,8 +31,8 @@ fn main() {
     // In libxdc makefile ODIR variable is used only for intermediate artifacts, the lib needs to
     // be moved
     rename(
-        PathBuf::from(LIBXDC_SOURCE).join(LIBXDC_STATIC_LIB),
-        PathBuf::from(&libxdc_artifacts_dir).join(LIBXDC_STATIC_LIB),
+        Path::new(LIBXDC_SOURCE).join(LIBXDC_STATIC_LIB),
+        Path::new(&libxdc_artifacts_dir).join(LIBXDC_STATIC_LIB),
     )
     .unwrap();
 
@@ -40,17 +40,13 @@ fn main() {
     println!("cargo:rustc-link-lib=static=xdc");
 
     let bindings = bindgen::Builder::default()
-        .header(
-            PathBuf::from(LIBXDC_SOURCE)
-                .join("libxdc.h")
-                .to_string_lossy(),
-        )
+        .header(Path::new(LIBXDC_SOURCE).join("libxdc.h").to_string_lossy())
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("Unable to generate libxdc bindings");
 
     bindings
-        .write_to_file(PathBuf::from(&out_dir).join("bindings.rs"))
+        .write_to_file(Path::new(&out_dir).join("bindings.rs"))
         .expect("Couldn't write bindings!");
 }
 
