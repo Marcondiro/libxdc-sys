@@ -11,6 +11,7 @@ repository = "https://github.com/Marcondiro/libxdc-sys.git"
 readme = "README.md"
 keywords = ["intelPT", "fuzzing"]
 categories = ["external-ffi-bindings"]
+exclude = ["/libxdc/*.sh", "/libxdc/logo.*"]
 
 [dependencies]
 
