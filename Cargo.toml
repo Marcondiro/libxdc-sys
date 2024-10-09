@@ -1,9 +1,16 @@
 [package]
 name = "libxdc-sys"
 version = "0.1.0"
+description = "Bindings for libxdc, an Intel-PT decoding library for fuzzing"
 edition = "2021"
-authors = ["Marco Cavenati"]
-links = "libxdc"
+authors = ["Marco Cavenati <cavenatimarco@gmail.com>"]
+links = "capstone"
+license = "MIT"
+homepage = "https://github.com/Marcondiro/libxdc-sys"
+repository = "https://github.com/Marcondiro/libxdc-sys.git"
+readme = "README.md"
+keywords = ["intelPT", "fuzzing"]
+categories = ["external-ffi-bindings"]
 
 [dependencies]
 
