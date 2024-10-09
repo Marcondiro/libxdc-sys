@@ -40,7 +40,7 @@ fn main() {
     println!("cargo:rustc-link-lib=static=xdc");
 
     let bindings = bindgen::Builder::default()
-        .header(Path::new(LIBXDC_SOURCE).join("libxdc.h").to_string_lossy())
+        .header("wrapper.h")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("Unable to generate libxdc bindings");
